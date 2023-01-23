@@ -1,0 +1,187 @@
+<div class="row">
+  <div [ngClass]="{'col-md-8 pr-0': modoEditar, 'col-md-12': !modoEditar}">
+
+    <div class="card rounded shadow-sm p-3">
+      <form [formGroup]="form">
+        <div class="p-3">
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label>Nome do Anime</label>
+              <input
+              type="text"
+              class="form-control"
+              [ngClass]="cssValidator(f.nome)"
+              formControlName="nome"
+              placeholder=""
+              />
+              <div *ngIf="f.nome.errors?.required" class="invalid-feedback">
+                Nome é obrigatório.
+              </div>
+              <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback">
+                Nome deve ter no mínimo 2 caracteres.
+              </div>
+              <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback">
+                Nome deve ter no máximo 50 caracteres.
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-5">
+              <label>Data de Lançamento</label>
+              <input
+              type="date"
+              class="form-control"
+              [ngClass]="cssValidator(f.dataLancamento)"
+              value="{{ anime.dataLancamento | DateTimeFormat }}"
+              formControlName="dataLancamento"
+              placeholder=""
+              />
+              <div
+              *ngIf="f.dataLancamento.errors?.required"
+              class="invalid-feedback"
+              >
+              Data é obrigatória.
+            </div>
+          </div>
+          <div class="form-group col-md-2">
+            <label>Fonte</label>
+            <select class="form-control">
+              <option value=""></option>
+              <option value="Manga">Manga</option>
+              <option value="Light Novel">Light Novel</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label>Demographic</label>
+            <select class="form-control">
+              <option value=""></option>
+              <option value="Adult">Adult</option>
+              <option value="Shounen">Shounen</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-2">
+            <label>Genêro</label>
+            <select class="form-control">
+              <option value=""></option>
+              <option value="Hentai">Hentai</option>
+              <option value="Ação">Ação</option>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label>Estudio</label>
+            <select class="form-control">
+              <option value=""></option>
+              <option value="Sentai Filmworks">Sentai Filmworks</option>
+              <option value="TMS Entertainment">TMS Entertainment</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <label>Episódios</label>
+            <input
+            type="text"
+            class="form-control"
+            [ngClass]="cssValidator(f.episodios)"
+            formControlName="episodios"
+            placeholder=""
+            />
+            <div *ngIf="f.episodios.errors?.required" class="invalid-feedback">
+              O Campo episódio é obrigatório.
+            </div>
+            <div *ngIf="f.episodios.errors?.minlength" class="invalid-feedback">
+              O Anime deve ter no mínimo 1 episódio.
+            </div>
+            <div *ngIf="f.episodios.errors?.maxlength" class="invalid-feedback">
+              O Anime deve ter no máximo 26 episódios.
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-8">
+            <label>Sinopse</label>
+            <input
+            type="text"
+            class="form-control"
+            [ngClass]="cssValidator(f.sinopse)"
+            formControlName="sinopse"
+            placeholder=""
+            />
+            <div *ngIf="f.sinopse.errors?.required" class="invalid-feedback">
+              Sinopse é obrigatória.
+            </div>
+            <div *ngIf="f.nome.errors?.minlength" class="invalid-feedback">
+              Sinopse deve ter no mínimo 2 caracteres.
+            </div>
+            <div *ngIf="f.nome.errors?.maxlength" class="invalid-feedback">
+              Sinopse deve ter no máximo 50 caracteres.
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex">
+          <button
+          class="btn btn-outline-secondary mr-auto border"
+          (click)="resetForm()"
+          >
+          Cancelar Alteração
+        </button>
+        <button
+        class="btn btn-success"
+        [disabled]="!form.valid"
+        (click)="salvarAlteracao()"
+        >
+        <span class="spinner-border spinner-border-sm mr-1"></span>
+        Salvar Anime
+      </button>
+    </div>
+    </div>
+    </form>
+    </div>
+
+
+  </div>
+  <div class="col-md-4" *ngIf="modoEditar">
+    <div [formGroup]="form" class="card-evento-view shadow-sm">
+      <div class="form-row">
+        <div class="form-group m-0">
+          <input type="file" #file (change)="onFileChange($event)" class="form-control is-invalid" placeholder="" style="display: none">
+        </div>
+      </div>
+      <div class="card profile-card-2">
+        <div class="card-img-block">
+          <img class="image" [src]="imagemURL" class="img-fluid" (click)="file.click()" alt="Card image cap"
+          tooltip="Upload de Nova Imagem" [adaptivePosition]="false" placement="bottom" />
+        </div>
+        <div class="card-body pt-3">
+          <h4>{{anime.nome}}</h4>
+          <p class="card-text">
+            <b>Genêro:</b> {{"Ação"}}
+            <br>
+            <b>Data:</b> {{anime.dataLancamento | DateTimeFormat}}
+          </p>
+          <hr>
+          <p class="card-text">
+            <b>Detalhes</b><br>
+            <small class="text-muted">Episódios: {{anime.episodios}}</small>
+            <br>
+            <small class="text-muted">Sinopse {{"This is Baki Hanma!"}}</small>
+          </p>
+          <div class="row">
+            <div class="icon-block col-md-8 iconesSociais">
+              <a href="">
+                <i class=""></i>
+              </a>
+            </div>
+            <!--div class="col-md-4 d-flex justify-content-center">
+              <a href="#" class="btn btn-outline-primary">Participar</a>
+            </div-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,101 @@
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class="flex-fill pr-3">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Filtro:</div>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Filtrar por Anime"
+          [(ngModel)]="filtroLista"
+        />
+      </div>
+    </div>
+    <div>
+      <a class="d-flex btn btn-outline-primary" routerLink="/animes/detalhe">
+        <i class="fa fa-plus-circle my-1"></i>
+        <b class="ml-1 d-none d-sm-block">Novo</b>
+      </a>
+    </div>
+  </div>
+
+  <!-- <h3>Filtro: {{filtroLista}}</h3> -->
+  <table class="table table-striped table-hover">
+    <thead class="thead-dark">
+      <tr>
+        <th class="d-none d-md-table-cell">
+          <button
+            type="button"
+            class="btn btn-outline-light btn-sm"
+            (click)="alterarImagem()"
+          >
+            <i
+              class="{{ !mostrarImagem ? 'fa fa-eye' : 'fa fa-eye-slash' }}"
+            ></i>
+            {{ !mostrarImagem ? "Exibir" : "Ocultar" }}
+          </button>
+        </th>
+        <th>#</th>
+        <th>Nome</th>
+        <th>Genêro</th>
+        <th class="d-none d-md-table-cell">Estúdio</th>
+        <th class="d-none d-md-table-cell">Lançamento</th>
+        <th class="d-none d-md-table-cell">Episódios</th>
+        <th>Opções</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="animes && animes.length">
+      <tr *ngFor="let anime of animesFiltrados" (click)="detalheAnime(anime.id)" style="cursor: pointer;">
+        <td class="d-none d-md-table-cell">
+          <img
+            [collapse]="!mostrarImagem"
+            [isAnimated]="true"
+            [src]="mostraImagem(anime.imagemURL)"
+            [style.width.px]="larguraImagem"
+            [style.margin.px]="margemImagem"
+          />
+        </td>
+        <td>{{ anime.id }}</td>
+        <td>{{ anime.nome }}</td>
+        <td>{{ anime.generos[0]?.nome }}</td>
+        <td class="d-none d-md-table-cell">{{ anime.estudios[0]?.nome }}</td>
+        <td class="d-none d-md-table-cell">
+          {{ anime.dataLancamento | DateTimeFormat }}
+        </td>
+        <td class="d-none d-md-table-cell">{{ anime.episodios }}</td>
+        <td>
+
+          <button
+            type="button"
+            class="btn btn-danger btn-lg"
+            tooltip="Excluir"
+            (click)="openModal($event, template, anime.id)"
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!animes.length">
+      <tr>
+        <td colspan="8" class="text-center">
+          <h4>Nenhum Anime Encontrado</h4>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <ng-template #template>
+    <div class="modal-body text-center">
+      <p>Tem certeza que quer deletar o Anime de Código {{this.animeId}} ?</p>
+      <button type="button" class="btn btn-default" (click)="confirm()">
+        Sim
+      </button>
+      <button type="button" class="btn btn-primary" (click)="decline()">
+        Não
+      </button>
+    </div>
+  </ng-template>
+</div>
